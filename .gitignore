@@ -2,3 +2,8 @@
 *.o
 *.so
 *.swp
+
+#Eclipse stuff
+*.cproject
+*.project
+Debug/

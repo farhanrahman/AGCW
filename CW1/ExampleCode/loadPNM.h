@@ -2,6 +2,7 @@
 #define __LOADPNM_H__
 
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 

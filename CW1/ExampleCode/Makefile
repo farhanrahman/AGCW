@@ -1,6 +1,6 @@
 programName := CW1
 programSRC := $(wildcard *.cpp)
-programOBJS := main.o loadPNM.o util.o image.o
+programOBJS := main.o loadPNM.o util.o image.o HDRCompiler.o
 
 CXX := g++
 CC := gcc
@@ -23,6 +23,9 @@ util.o: util.cpp
 
 image.o: image.cpp
 	$(LINK.cc) -c -o image.o image.cpp
+
+HDRCompiler.o: HDRCompiler.cpp
+	$(LINK.cc) -c -o HDRCompiler.o HDRCompiler.cpp
 
 clean:
 	@- rm $(programOBJS)

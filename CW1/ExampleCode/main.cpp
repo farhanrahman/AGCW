@@ -11,6 +11,7 @@ Year: 2013
 #include <vector>
 #include "util.h"
 #include "image.h"
+#include "HDRCompiler.h"
 
 int main(int argc, char** argv)
 {  
@@ -47,10 +48,14 @@ int main(int argc, char** argv)
 	std::vector<Image> images;
 
 	for (int i = 0; i < 7; ++i){		
-		images.push_back(Image(inputImageNames[i].c_str(), exposures[i]));
+		Image image  = Image(inputImageNames[i].c_str(), exposures[i]);
+		images.push_back(image);
+		//image.writeAsPPM(outputImageNames[i].c_str());
+	
 	}
 
-
+	HDRCompiler hdrCompiler;
+	hdrCompiler.compileHDR(images);
   	return 0;
 }
 

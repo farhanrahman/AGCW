@@ -37,8 +37,8 @@ void Image::writeAsPPM(const char *outputFile){
 				//typecast 0.0f -> 1.0f values to the 0 - 255 range 
 
 				img_out[index] = static_cast<unsigned char>(buffer[index]*255.0f); //R 
-				img_out[index + 1] = static_cast<unsigned char>(buffer[index + 1]*255.0f);//G
-				img_out[index + 2] = static_cast<unsigned char>(buffer[index + 2]*255.0f);//B
+				//img_out[index + 1] = static_cast<unsigned char>(buffer[index + 1]*255.0f);//G
+				//img_out[index + 2] = static_cast<unsigned char>(buffer[index + 2]*255.0f);//B
 			}   
 		}   
 	}   

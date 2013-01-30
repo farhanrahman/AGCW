@@ -33,8 +33,11 @@ int main(int argc, char** argv)
 	//  LoadPPMAndSavePFM(argv[1], argv[2]); //Loads PPM and saves a PFM file
 	    LoadPFMAndSavePPM(argv[1], argv[2]); //Loads PFM and saves a PPM file
 	}  
-	 
+
 	*/
+
+	cout << "Loading Images" << endl;
+
 	std::string inputImageNames[] = {"../Memorial/memorial1.pfm", "../Memorial/memorial2.pfm", "../Memorial/memorial3.pfm",
 				"../Memorial/memorial4.pfm", "../Memorial/memorial5.pfm", "../Memorial/memorial6.pfm",
 				"../Memorial/memorial7.pfm"};
@@ -54,8 +57,13 @@ int main(int argc, char** argv)
 	
 	}
 
+	cout << "Compiling HDR" << endl;
+
 	HDRCompiler hdrCompiler;
 	hdrCompiler.compileHDR(images);
+
+	cout << "Finished!" << endl;
+
   	return 0;
 }
 

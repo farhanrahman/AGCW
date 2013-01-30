@@ -10,78 +10,72 @@ HDRCompiler::HDRCompiler(){
 }
 
 Image HDRCompiler::compileHDR(std::vector<Image> &images){
-	this->pixelMax = 0.0;
-	this->pixelMin = std::numeric_limits<float>::max();
-	std::vector<Image>::iterator it;
-	uint w = 0;
-	uint h = 0;
-	/*Acquire the pixel minimum and maximum values*/
-	for (it = images.begin(); it != images.end(); ++it){
-		float *image = (*it).buffer;
-		uint width = (*it).width;
-		uint height = (*it).height;
-		uint channels = (*it).numComponents;
-		w = std::max(width, w);
-		h = std::max(height, h);
-		for(uint i = 0; i < height; ++i)
-			for(uint j = 0; j < width; ++j)
-				for(uint k = 0; k < channels; ++k){
-					uint index = i*channels*width + j*channels + k;
-					pixelMax = std::max(pixelMax, image[index]);
-					pixelMin = std::min(pixelMin, image[index]);
+
+	uint numImages = images.size();
+//	uint numImages = 2;
+	uint height = images[0].height;
+	uint width = images[0].width;
+	uint numChannels = images[0].numComponents;
+
+	Image result(width,height,numChannels);
+
+	for (uint i = 0; i < height; i++) {
+		for (uint j = 0; j < width; j++) {
+			uint pixel = i * width + j;
+			uint index = pixel * numChannels;
+			float weightSum[] = {0,0,0};
+			float numerator[] = {0,0,0};
+			for (uint k = 0; k < numImages; k++) {
+
+				Image img = images[k];
+
+				float inPix[] = {
+					img.buffer[index],
+					img.buffer[index+1],
+					img.buffer[index+2],
+				};
+				bool OOR = false;
+				for (uint c = 0; c < numChannels; c++) {
+					if (isOutOfRange(inPix[c])) {
+						OOR = true;
+						break;
+					}
+				}
+				if (OOR) {
+					continue;
+				}
+
+				uint exposure = img.exposure;
+
+				for(uint c = 0; c < numChannels; c++){
+					float channel = inPix[c];
+					//float channel = img.gsBuffer[pixel];
+					float pixelWeight = weight(channel);
+					weightSum[c] += pixelWeight;
+					numerator[c] += pixelWeight*(channel * log(1/(float) exposure));
+				}
+			}
+			for (uint c = 0; c < numChannels; c++) {
+				float r = exp((float) (numerator[c] / weightSum[c]));
+				result.buffer[index + c] = r;
+			}
 		}
 	}
 
-	this->clampMax(pixelMax);
-	this->clampMin(pixelMin);
-	this->avg = 0.5*(pixelMax+pixelMin);
-
-	Image result(w, h);
-	uint numComponents = result.numComponents;
-	for(int i = 0; i < h; ++i)
-		for(int j = 0; j < w; ++j)
-			for(int k = 0; k < numComponents; ++k){
-				uint index = i*numComponents*w + j*numComponents + k;
-				float weightSum = 0.0;
-				float numerator = 0.0;
-				for(it = images.begin(); it != images.end(); ++it){
-					uint exposure = (*it).exposure;
-					float pixel = (*it).buffer[index];
-					float pixelWeight = weight(pixel);
-					weightSum += pixelWeight;
-					numerator += pixelWeight*(pixel * log(1/(float) exposure));
-				}
-				
-				result.buffer[index] = exp((float) (numerator / weightSum));
-				this->getInRange(result.buffer[index]);
-	}
-
-	result.writeAsPPM("out.ppm");	
-
+	result.writeAsPPM("out.ppm");
 }
 
-void HDRCompiler::clampMax(float &value){
-	value = std::min(CLAMP_MAX, value);
-}
-
-void HDRCompiler::clampMin(float &value){
-	value = std::max(CLAMP_MIN, value);
-}
-
-void HDRCompiler::getInRange(float &value){
+bool HDRCompiler::isOutOfRange(float value) {
 	if(value > CLAMP_MAX){
-		value = CLAMP_MAX;
+		return true;
 	} else if (value < CLAMP_MIN){
-		value = CLAMP_MIN;
+		return true;
 	}
+	return false;
 }
 
 /*Weight function*/
 float HDRCompiler::weight(float z){
-	this->getInRange(z);
-	if (z <= avg){
-		return (z - pixelMin);
-	} else {
-		return (pixelMax - z);
-	}
+//	return 0.05;
+	return 2.0f * (0.5f - fabsf(0.5f - z));
 }

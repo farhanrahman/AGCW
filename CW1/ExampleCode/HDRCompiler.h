@@ -8,16 +8,10 @@ public:
 	HDRCompiler();
 	Image compileHDR(std::vector<Image> &images);
 	float weight(float z);
-	void getInRange(float &value);
+	bool isOutOfRange(float value);
 private:
 	float CLAMP_MAX;
 	float CLAMP_MIN;
-	float avg;
-	float pixelMax;
-	float pixelMin;
-	void clampMax(float &value);
-	void clampMin(float &value);
-
 };
 
 #endif

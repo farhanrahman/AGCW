@@ -10,8 +10,21 @@ Image::Image(const char * inputImage, unsigned int exposure){
 }
 
 void Image::initialise(const char * inputImage){
-	this->buffer = new float[width*height*numComponents];
-        this->buffer = loadPFM(inputImage, width, height, numComponents);
+
+    this->buffer = loadPFM(inputImage, width, height, numComponents);
+
+	this->gsBuffer = new float[width * height];
+
+	for (unsigned int i = 0; i < height; i++) {
+		for (unsigned int j = 0; j < width; j++) {
+			unsigned int pixel = (i * width + j);
+			unsigned int arrayOffset = pixel * numComponents;
+			float red = this->buffer[arrayOffset];
+			float green = this->buffer[arrayOffset+1];
+			float blue = this->buffer[arrayOffset+2];
+			gsBuffer[pixel] = (0.2126 * red + 0.7152 * green+ 0.0722 * blue);
+		}
+	}
 }
 
 Image::~Image(void){

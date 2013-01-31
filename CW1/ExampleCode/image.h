@@ -17,7 +17,6 @@ public:
 	{
 		assert(width > 0 && height > 0 && exposure >= 1);
 		this->buffer = new float [width*height*numComponents];
-		this->gsBuffer = new float [width*height];
 	}
 	
 	Image(const char * inputImage);
@@ -33,7 +32,6 @@ public:
 	void writeAsPPM(const char *outputFile);
 
 	float *buffer;
-	float* gsBuffer;
 	unsigned int width;
 	unsigned int height;
 	unsigned int numComponents;

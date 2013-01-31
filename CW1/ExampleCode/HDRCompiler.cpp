@@ -12,7 +12,6 @@ HDRCompiler::HDRCompiler(){
 Image HDRCompiler::compileHDR(std::vector<Image> &images){
 
 	uint numImages = images.size();
-//	uint numImages = 2;
 	uint height = images[0].height;
 	uint width = images[0].width;
 	uint numChannels = images[0].numComponents;
@@ -49,10 +48,9 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 
 				for(uint c = 0; c < numChannels; c++){
 					float channel = inPix[c];
-					//float channel = img.gsBuffer[pixel];
 					float pixelWeight = weight(channel);
 					weightSum[c] += pixelWeight;
-					numerator[c] += pixelWeight*(channel * log(1/(float) exposure));
+					numerator[c] += pixelWeight*(log((1/(float) exposure) * channel));
 				}
 			}
 			for (uint c = 0; c < numChannels; c++) {

@@ -12,19 +12,6 @@ Image::Image(const char * inputImage, unsigned int exposure){
 void Image::initialise(const char * inputImage){
 
     this->buffer = loadPFM(inputImage, width, height, numComponents);
-
-	this->gsBuffer = new float[width * height];
-
-	for (unsigned int i = 0; i < height; i++) {
-		for (unsigned int j = 0; j < width; j++) {
-			unsigned int pixel = (i * width + j);
-			unsigned int arrayOffset = pixel * numComponents;
-			float red = this->buffer[arrayOffset];
-			float green = this->buffer[arrayOffset+1];
-			float blue = this->buffer[arrayOffset+2];
-			gsBuffer[pixel] = (0.2126 * red + 0.7152 * green+ 0.0722 * blue);
-		}
-	}
 }
 
 Image::~Image(void){
@@ -47,11 +34,14 @@ void Image::writeAsPPM(const char *outputFile){
 			{   
 				unsigned int index = i*width*numComponents + j*numComponents + k; //index within the image
 
-				//typecast 0.0f -> 1.0f values to the 0 - 255 range 
+//				typecast 0.0f -> 1.0f values to the 0 - 255 range
+				float res = buffer[index]*255000.0f;
+				if (res > 255.0f) {
+					res = 255.0f;
+				}
+//				float res = buffer[index]*255.0f;
 
-				img_out[index] = static_cast<unsigned char>(buffer[index]*255.0f); //R 
-				//img_out[index + 1] = static_cast<unsigned char>(buffer[index + 1]*255.0f);//G
-				//img_out[index + 2] = static_cast<unsigned char>(buffer[index + 2]*255.0f);//B
+				img_out[index] = (unsigned char) res; //R
 			}   
 		}   
 	}   

@@ -1,6 +1,9 @@
 #include "HDRCompiler.h"
 #include <limits>
 #include <math.h>
+#include <string>
+#include <sstream>
+
 
 #define uint unsigned int
 
@@ -33,12 +36,22 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 					img.buffer[index+1],
 					img.buffer[index+2],
 				};
+				float average = (0.2126 * inPix[0] + 0.7152 * inPix[1] + 0.0722 * inPix[2]);
+				float pixelWeight;
+				if (k == numImages - 1) {
+					pixelWeight = weightHighestExposure(average);
+				}
+				else if (k == 0) {
+					pixelWeight = weightLowestExposure(average);
+				}
+				else {
+					pixelWeight = weight(average);
+				}
 
 				uint exposure = img.exposure;
 
 				for(uint c = 0; c < numChannels; c++){
 					float channel = inPix[c];
-					float pixelWeight = weight(channel);
 					weightSum[c] += pixelWeight;
 					numerator[c] += pixelWeight*(log((1/(float) exposure) * channel));
 				}
@@ -50,7 +63,20 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 		}
 	}
 
-	result.writeAsPPM("out.ppm");
+	for (int i = 0; i < 13; i++) {
+
+		result.exposure = pow(2,i);
+		std::stringstream ss;
+		std::string out = "out";
+		std::string str;
+		std::string ppm = ".ppm";
+		ss << out << i << ppm;
+		ss >> str;
+		result.writeAsPPM(str.c_str());
+	}
+	result.writeToFile("out.pfm");
+
+//	result.writeAsPPM("out.ppm");
 }
 
 bool HDRCompiler::isOutOfRange(float value) {
@@ -65,8 +91,21 @@ bool HDRCompiler::isOutOfRange(float value) {
 /*Weight function*/
 float HDRCompiler::weight(float z){
 
-	if (z > CLAMP_MAX) return 0.00001f;
-	if (z < CLAMP_MIN) return 0.00001f;
+	if (z > CLAMP_MAX) return 0.0001f;
+	if (z < CLAMP_MIN) return 0.0001f;
 
+	return 2.0f * (0.5f - fabsf(0.5f - z));
+}
+
+/*Weight function*/
+float HDRCompiler::weightLowestExposure(float z){
+
+	if (z < CLAMP_MIN) return 0.0001f;
+	return 2.0f * (0.5f - fabsf(0.5f - z));
+}
+
+/*Weight function*/
+float HDRCompiler::weightHighestExposure(float z){
+	if (z > CLAMP_MAX) return 0.0001f;
 	return 2.0f * (0.5f - fabsf(0.5f - z));
 }

@@ -8,6 +8,8 @@ public:
 	HDRCompiler();
 	Image compileHDR(std::vector<Image> &images);
 	float weight(float z);
+	float weightLowestExposure(float z);
+	float weightHighestExposure(float z);
 	bool isOutOfRange(float value);
 private:
 	float CLAMP_MAX;

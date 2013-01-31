@@ -35,11 +35,10 @@ void Image::writeAsPPM(const char *outputFile){
 				unsigned int index = i*width*numComponents + j*numComponents + k; //index within the image
 
 //				typecast 0.0f -> 1.0f values to the 0 - 255 range
-				float res = buffer[index]*255000.0f;
+				float res = buffer[index]*255.0f * exposure;
 				if (res > 255.0f) {
 					res = 255.0f;
 				}
-//				float res = buffer[index]*255.0f;
 
 				img_out[index] = (unsigned char) res; //R
 			}   

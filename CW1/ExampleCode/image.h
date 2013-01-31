@@ -31,6 +31,8 @@ public:
 
 	void writeAsPPM(const char *outputFile);
 
+	void writeAsHDRPPM(const char* outputFile);
+
 	float *buffer;
 	unsigned int width;
 	unsigned int height;

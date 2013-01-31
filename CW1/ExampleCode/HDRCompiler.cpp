@@ -76,7 +76,7 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 	}
 	result.writeToFile("out.pfm");
 
-//	result.writeAsPPM("out.ppm");
+	result.writeAsHDRPPM("out.ppm");
 }
 
 bool HDRCompiler::isOutOfRange(float value) {

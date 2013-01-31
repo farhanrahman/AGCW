@@ -33,16 +33,6 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 					img.buffer[index+1],
 					img.buffer[index+2],
 				};
-				bool OOR = false;
-				for (uint c = 0; c < numChannels; c++) {
-					if (isOutOfRange(inPix[c])) {
-						OOR = true;
-						break;
-					}
-				}
-				if (OOR) {
-					continue;
-				}
 
 				uint exposure = img.exposure;
 
@@ -74,6 +64,9 @@ bool HDRCompiler::isOutOfRange(float value) {
 
 /*Weight function*/
 float HDRCompiler::weight(float z){
-//	return 0.05;
+
+	if (z > CLAMP_MAX) return 0.00001f;
+	if (z < CLAMP_MIN) return 0.00001f;
+
 	return 2.0f * (0.5f - fabsf(0.5f - z));
 }

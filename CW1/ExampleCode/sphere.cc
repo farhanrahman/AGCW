@@ -46,6 +46,9 @@ bool Sphere::intersect(const EnvironmentMap& em, const Ray &r, Hit &h)
         //Vec3f q = r.pointAtParameter(min(mu1, mu2));
         if(min(mu1,mu2) < h.getT()) { //if the current hit distance is greater than the current intersection point distance 
            	//h.set(min(mu1, mu2), (*this)._color); //update h.
+
+//        h.set(Vec3f(1.0f,1.0f,1.0f));
+
 		Vec3f n = r.pointAtParameter(min(mu1,mu2)) - (*this).centre;
 		n.Normalize();
 		Vec3f v = r.pointAtParameter(min(mu1,mu2)).Negated();

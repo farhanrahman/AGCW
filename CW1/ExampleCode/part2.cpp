@@ -48,6 +48,8 @@ int main (int argc, char * argv[]){
 
 	EnvironmentMap em(llImage);
 
+
+
 	renderScene(em, scene, image);
 
 	image.writeAsPPM(_outputName);

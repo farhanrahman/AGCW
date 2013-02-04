@@ -7,7 +7,7 @@ programCCSRC := $(wildcard *.cc)
 
 programOBJS := ${programCPPSRC:.cpp=.o} ${programCCSRC:.cc=.o}
 
-partOneOBJS := main.o loadPNM.o util.o image.o HDRCompiler.o #convUtil.o
+partOneOBJS := main.o loadPNM.o util.o image.o HDRCompiler.o
 
 partTwoOBJS := image.o scene_parser.o sphere.o group.o orthographic_camera.o part2.o loadPNM.o util.o
 
@@ -21,7 +21,7 @@ LDFLAGS = -lm
 INCS = EnvironmentMap.h hit.h image.h ray.h scene_parser.h vectors.h \
 	object3d.h group.h camera.h orthographic_camera.h
 
-partTwoOBJS =	image.o scene_parser.o sphere.o group.o orthographic_camera.o part2.o loadPNM.o util.o #convUtil.o
+partTwoOBJS =	image.o scene_parser.o sphere.o group.o orthographic_camera.o part2.o loadPNM.o util.o
 
 
 
@@ -49,12 +49,6 @@ image.o: image.cpp
 
 HDRCompiler.o: HDRCompiler.cpp
 	$(LINK.cc) -c -o HDRCompiler.o HDRCompiler.cpp
-
-#convUtil.o: convUtil.cpp
-#	$(LINK.cc) -c -o convUtil.o convUtil.cpp
-
-
-
 
 orthographic_camera.o: $(INCS) orthographic_camera.cc
 	$(CC) $(CFLAGS) orthographic_camera.cc -o orthographic_camera.o

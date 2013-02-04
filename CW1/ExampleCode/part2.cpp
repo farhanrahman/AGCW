@@ -48,8 +48,6 @@ int main (int argc, char * argv[]){
 
 	EnvironmentMap em(llImage);
 
-
-
 	renderScene(em, scene, image);
 
 	image.writeAsPPM(_outputName);
@@ -63,7 +61,7 @@ void renderScene(EnvironmentMap& em, SceneParser &scene, Image &image){
      *for every co-ordinate (i,j)*/
     
     image.SetAllPixels(scene.getBackgroundColor());
-    for(int i = 0; i < _width; i++)
+    for(int i = 0; i < _width; i++) {
         for(int j = 0; j < _height; j++){
             /*Initialise the HIT object h to have a distance of INFINITY
              *and color set to specified background color*/
@@ -78,5 +76,5 @@ void renderScene(EnvironmentMap& em, SceneParser &scene, Image &image){
                 image.SetPixel(i, j, h.getColor());
             }
         }
+    }
 }
-

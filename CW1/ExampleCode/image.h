@@ -3,6 +3,10 @@
 #include "loadPNM.h"
 #include <assert.h>
 
+#include "vectors.h"
+
+#define uchar unsigned char
+
 class Image{
 public:
 	Image(
@@ -32,6 +36,14 @@ public:
 	void writeAsPPM(const char *outputFile);
 
 	void writeAsHDRPPM(const char* outputFile);
+	
+	void writeAsHDRPPM2(const char *outputFile);
+
+	void histogramEqualization(unsigned char **imgPP, unsigned int px, unsigned int py, unsigned int windowsize, unsigned int iw, unsigned int ih);
+
+	void SetAllPixels(const Vec3f &color);
+
+	void SetPixel(unsigned int x, unsigned int y, const Vec3f &color);
 
 	float *buffer;
 	unsigned int width;

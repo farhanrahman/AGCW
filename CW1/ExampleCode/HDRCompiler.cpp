@@ -74,8 +74,11 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 		ss >> str;
 		result.writeAsPPM(str.c_str());
 	}
+
 	result.writeToFile("out.pfm");
 
+	//result.writeAsHDRPPM2("outHDRPPM2.ppm");
+	//result.writeAsPPM("out.ppm");
 	result.writeAsHDRPPM("out.ppm");
 }
 

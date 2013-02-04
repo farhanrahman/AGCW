@@ -1,0 +1,2 @@
+./partOne
+eog *.ppm

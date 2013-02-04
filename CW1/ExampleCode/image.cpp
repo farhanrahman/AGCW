@@ -1,7 +1,7 @@
 #include "image.h"
 #include <math.h>
 #include "colour.h"
-#include "convUtil.h"
+//#include "convUtil.h"
 #include <fstream>
 
 #define GAMMA 1.2f

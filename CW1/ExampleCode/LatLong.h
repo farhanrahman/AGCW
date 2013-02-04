@@ -56,12 +56,15 @@ public:
 
 	static LatLong v3f2ll(const Vec3f& vec){
 		LatLong l;
+		//l.setZenith(0.0);
+		//l.setAzimuth(0.0);
 		l.setZenith(acos(vec.y()));
 		if (vec.z() != 0.0){
 			l.setAzimuth(atan(vec.x() / vec.z()));
 		} else {
 			l.setAzimuth(0.0);
 		}
+		return l;
 	}
 
 private:

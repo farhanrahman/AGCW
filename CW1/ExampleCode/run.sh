@@ -1,2 +1,3 @@
 ./partOne
+./partTwo
 eog *.ppm

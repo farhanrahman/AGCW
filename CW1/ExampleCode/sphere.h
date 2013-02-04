@@ -24,7 +24,7 @@ public:
 
   // A concrete implementation of pure virtual function in parent
   // class.
-  virtual bool intersect(const Ray &r, Hit &h);
+  virtual bool intersect(const EnvironmentMap &em, const Ray &r, Hit &h);
 
 };
 

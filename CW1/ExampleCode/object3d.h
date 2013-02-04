@@ -25,7 +25,7 @@ public:
   // Identify if the given ray intersects the object.  Return true if it does
   // and update the hit object to contain the smallest value of t (ray
   // parameter) and the colour of the point of intersection.
-  virtual bool intersect(const Ray &r, Hit &h) = 0;
+  virtual bool intersect(const EnvironmentMap &em, const Ray &r, Hit &h) = 0;
 
 };
 

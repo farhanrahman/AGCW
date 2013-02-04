@@ -18,7 +18,7 @@ CFLAGS  = -I. -c -g
 
 LDFLAGS = -lm
 
-INCS = hit.h image.h ray.h scene_parser.h vectors.h \
+INCS = EnvironmentMap.h hit.h image.h ray.h scene_parser.h vectors.h \
 	object3d.h group.h camera.h orthographic_camera.h
 
 partTwoOBJS =	image.o scene_parser.o sphere.o group.o orthographic_camera.o part2.o loadPNM.o util.o convUtil.o

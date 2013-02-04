@@ -22,7 +22,7 @@ Sphere::Sphere(Vec3f centre, float radius, Vec3f color)
 
 
 
-bool Sphere::intersect(const Ray &r, Hit &h)
+bool Sphere::intersect(const EnvironmentMap& em, const Ray &r, Hit &h)
 {
     Vec3f d      = r.getDirection();
     Vec3f deltaP = ((*this).centre - r.getOrigin());
@@ -44,8 +44,18 @@ bool Sphere::intersect(const Ray &r, Hit &h)
         float mu1 = (ddotdp + sqrtf(determinant)); //calculate the mu1 term
         float mu2 = (ddotdp - sqrtf(determinant)); //calculate the mu2 term       
         //Vec3f q = r.pointAtParameter(min(mu1, mu2));
-        if(min(mu1,mu2) < h.getT()) //if the current hit distance is greater than the current intersection point distance 
-            h.set(min(mu1, mu2), (*this)._color); //update h.
+        if(min(mu1,mu2) < h.getT()) { //if the current hit distance is greater than the current intersection point distance 
+           	//h.set(min(mu1, mu2), (*this)._color); //update h.
+		Vec3f n = r.pointAtParameter(min(mu1,mu2)) - (*this).centre;
+		n.Normalize();
+		Vec3f v = r.pointAtParameter(min(mu1,mu2)).Negated();
+		v.Normalize();
+		float ndotv = n.Dot3(v);
+		ndotv *= 2.0;
+		Vec3f r(n.Scale(ndotv) - v);
+		LatLong ll(r);
+		h.set(min(mu1,mu2), em.mapTo(ll));
+	}
     }
     
     return true;

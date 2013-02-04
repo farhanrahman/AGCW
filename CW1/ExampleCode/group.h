@@ -29,7 +29,7 @@ public:
   // Insert an object into the array.
   void addObject(int index, Object3D *obj);
 
-  bool intersect(const Ray &r, Hit &h);
+  bool intersect(const EnvironmentMap &em, const Ray &r, Hit &h);
 
 };
 

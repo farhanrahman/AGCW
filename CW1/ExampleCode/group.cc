@@ -29,7 +29,7 @@ void Group::addObject(int index, Object3D *obj) {
     
 }
 
-bool Group::intersect(const Ray &r, Hit &h)
+bool Group::intersect(const EnvironmentMap &em, const Ray &r, Hit &h)
 {
     /*For every object currently in the list, go through them
      *and calculate the intersection point with that object.
@@ -42,7 +42,7 @@ bool Group::intersect(const Ray &r, Hit &h)
     float min_distance = INFINITY; //initialise min_distance to INFINITY. Assume no intersection
     //cout << "Grpup intersect called" << endl;
     for (int i = 0; i < _count; i++) { //loop through every object.
-        if(_object[i]->intersect(r, h)){ //determine the intersect point of object and ray
+        if(_object[i]->intersect(em, r, h)){ //determine the intersect point of object and ray
             if (h.getT() < min_distance) {
                 min_distance = h.getT();//update the minimum distance
             }

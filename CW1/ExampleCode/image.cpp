@@ -24,7 +24,7 @@ Image::~Image(void){
 	//delete buffer;
 }
 
-float Image::operator[] (unsigned int index){
+float Image::operator[] (unsigned int index) const{
 	return (*this).buffer[index];
 } 
 

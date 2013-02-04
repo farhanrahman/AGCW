@@ -29,7 +29,7 @@ public:
 
 	~Image(void);
 
-	float operator[] (unsigned int index);
+	float operator[] (unsigned int index) const;
 
 	void writeToFile(const char* outputFile);
 

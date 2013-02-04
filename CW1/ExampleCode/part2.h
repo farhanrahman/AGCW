@@ -12,8 +12,12 @@
 
 using namespace std;
 
+
 #include "vectors.h"
+#include "LatLong.h"
 #include "image.h"
+
+#include "EnvironmentMap.h"
 
 #include "ray.h"
 #include "hit.h"
@@ -26,6 +30,5 @@ using namespace std;
 #include "orthographic_camera.h"
 
 #include "scene_parser.h"
-
 
 #endif /* RAYCAST_H_ */

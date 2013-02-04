@@ -1,12 +1,14 @@
 #include "part2.h"
 
+#define LL_IMAGE "../GraceCathedral/grace_latlong.pfm"
+
 char *_inputName       	= NULL;
 char *_outputName   	= NULL;
 
 unsigned int _width      = 511;
 unsigned int _height     = 511;
 
-void renderScene(SceneParser &, Image &);
+void renderScene(EnvironmentMap& em, SceneParser &, Image &);
 
 int main (int argc, char * argv[]){
     // sample command lines:
@@ -42,14 +44,18 @@ int main (int argc, char * argv[]){
 
 	Image image(_width, _height);
 	
-	renderScene(scene, image);
+	Image llImage(LL_IMAGE);
+
+	EnvironmentMap em(llImage);
+
+	renderScene(em, scene, image);
 
 	image.writeAsPPM(_outputName);
 
 	return 0;
 }
 
-void renderScene(SceneParser &scene, Image &image){
+void renderScene(EnvironmentMap& em, SceneParser &scene, Image &image){
     /*First set the background color to the specified background color.
      *Then iterate through the viewport co-ordinates to generate ray
      *for every co-ordinate (i,j)*/
@@ -64,7 +70,7 @@ void renderScene(SceneParser &scene, Image &image){
             
             /*Generate ray from Camera for viewport co-ordinate (i,j)*/
             Ray r = (*scene.getCamera()).generateRay(Vec2f(((float)i)/((float)_width),((float)j)/((float)_height)));
-            if((*scene.getGroup()).intersect(r,h)){
+            if((*scene.getGroup()).intersect(em, r,h)){
                 /*If there is an intersection, set the pixel on the image
                  *to be the color of the nearest object that intersects*/
                 image.SetPixel(i, j, h.getColor());

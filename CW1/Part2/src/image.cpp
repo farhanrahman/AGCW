@@ -3,7 +3,7 @@
 #include "colour.h"
 #include <fstream>
 
-#define GAMMA 1.2f
+#define GAMMA 1.3f
 
 Image::Image(const char * inputImage){
 	this->initialise(inputImage);
@@ -40,8 +40,8 @@ void Image::writeAsPPM(const char *outputFile){
 				unsigned int index = i*width*numComponents + j*numComponents + k; //index within the image
 
 //				typecast 0.0f -> 1.0f values to the 0 - 255 range
-//				float res = pow(buffer[index]*255.0f * exposure, 1/GAMMA);
-				float res = buffer[index]*255.0f*exposure;
+				float res = pow(buffer[index]*255.0f * exposure, 1/GAMMA);
+//				float res = buffer[index]*255.0f*exposure;
 				if (res > 255.0f) {
 					res = 255.0f;
 				}

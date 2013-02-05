@@ -27,6 +27,8 @@ public:
 
   Vec3f getNormalAt(const Ray &r);
 
+  Vec3f getCentre(void) const;
+
 };
 
 #endif /* SPHERE_H_ */

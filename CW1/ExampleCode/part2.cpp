@@ -77,4 +77,5 @@ void renderScene(EnvironmentMap& em, SceneParser &scene, Image &image){
             }
         }
     }
+    image.exposure = 16;
 }

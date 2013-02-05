@@ -1,7 +1,8 @@
 #ifndef ENVIRONMENTMAP_H
 #define ENVIRONMENTMAP_H
 
-#include "part2.h"
+#include "LatLong.h"
+#include "image.h"
 
 class EnvironmentMap{
 public:
@@ -9,8 +10,8 @@ public:
 	~EnvironmentMap() {}
 
 	Vec3f mapTo(float theta, float phi) const{
-		unsigned int i = (unsigned int) (theta * ((float) image.height));
-		unsigned int j = (unsigned int) (phi * ((float) image.width));
+		unsigned int i = (unsigned int) ((theta/PI) * ((float) image.height));
+		unsigned int j = (unsigned int) ((phi/(2*PI)) * ((float) image.width));
 		unsigned int index = (i*image.width + j) * image.numComponents;
 		if (index > image.height * image.width * image.numComponents) {
 			return Vec3f(1.0f,1.0f,1.0f);

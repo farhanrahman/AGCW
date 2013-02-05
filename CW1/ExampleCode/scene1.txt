@@ -1,9 +1,9 @@
 
 OrthographicCamera {
-    center 0 0 10 
-    direction 0 0 -1  
+    center 0 0 40 
+    direction 0 0 1  
     up 0 1 0
-    size 5
+    size 10
 }
 
 Background { color 0 0 0 }
@@ -15,7 +15,7 @@ Group {
     }
     Sphere {
 	center 0 0 0 
-        radius 1 
+        radius 2 
     }
 }
 

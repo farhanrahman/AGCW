@@ -5,6 +5,8 @@
 #include <math.h>
 #include "vectors.h"
 
+#define PI 3.14159265358979323
+
 class LatLong{
 public:
 	LatLong(float zenith = 0.0, float azimuth = 0.0){
@@ -34,7 +36,9 @@ public:
 
 	/*Setter methods*/
 	void setZenith(float z){ this->data[0] = z; }
+	void setTheta(float theta) { this->data[0] = theta; }
 	void setAzimuth(float a){ this->data[1] = a; }
+	void setPhi(float phi) { this->data[1] = phi; }
 	void setLatLong(float z, float a) {
 		this->setZenith(z);
 		this->setAzimuth(a);
@@ -58,13 +62,30 @@ public:
 		LatLong l;
 		//l.setZenith(0.0);
 		//l.setAzimuth(0.0);
-		l.setZenith(acos(vec.y()));
-		if (vec.z() != 0.0){
-			l.setAzimuth(atan(vec.x() / vec.z()));
-		} else {
-			l.setAzimuth(0.0);
-		}
-		return l;
+//		l.setZenith(acos(vec.y()));
+//		if (vec.z() != 0.0){
+//			l.setAzimuth(atan(vec.x() / vec.z()));
+//		} else {
+//			l.setAzimuth(0.0);
+//		}
+//		return l;
+         float x = vec.x();
+		 float y = vec.y();
+		 float z = vec.z();
+		 //float r = sqrt(x*x + y*y + z*z);
+		 //float s = sqrt(x*x + y*y);
+		 //float phi = acos(z/r);
+		 //float theta = atan2(y,x);
+		 float phi = atan2(x,z);
+		 float theta = acos(y);
+		 //float phi = atan2(y,x);
+		 //float theta = atan2(z, s);
+
+		 l.setPhi(phi);
+		 l.setTheta(theta);
+		 return l;
+
+
 	}
 
 private:

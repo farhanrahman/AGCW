@@ -42,7 +42,7 @@ bool Sphere::intersect(const Ray &r, Vec3f* intersection)
 	}
 	//If discriminant >= 0, get nearest point of intersection
 	else {
-		float dist = ldotc - sqrtf(discr);
+		float dist = ldotc - sqrt(discr);
 
 		*intersection = r.getOrigin() + (r.getDirection() * dist);
 //
@@ -65,4 +65,8 @@ Vec3f Sphere::getNormalAt(const Ray &r) {
 	else {
 		return Vec3f(0.0f,0.0f,0.0f);
 	}
+}
+
+Vec3f Sphere::getCentre(void) const{
+	return this->centre;
 }

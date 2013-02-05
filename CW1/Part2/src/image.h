@@ -35,6 +35,8 @@ public:
 
 	void writeAsPPM(const char *outputFile);
 
+	void writeAsPPMGamma(const char *outputFile);
+
 	void writeAsHDRPPM(const char* outputFile);
 	
 	void writeAsHDRPPM2(const char *outputFile);

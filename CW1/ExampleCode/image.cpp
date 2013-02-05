@@ -101,10 +101,10 @@ void Image::writeAsHDRPPM(const char *outputFile){
 	{
 		for ( unsigned int j = 0 ; j < width ; ++j ) // width
 		{
-//			unsigned int pi = (i*width+j)*numComponents;
-//			float average = ((float)(RESOLUTION-1)) * (0.2126 * buffer[pi] + 0.7152 * buffer[pi+1] + 0.0722 * buffer[pi+2]);
-//
-//			float toned = tonemap[(int)average];
+			unsigned int pi = (i*width+j)*numComponents;
+			float average = ((float)(RESOLUTION-1)) * (0.2126 * buffer[pi] + 0.7152 * buffer[pi+1] + 0.0722 * buffer[pi+2]);
+
+			float toned = tonemap[(int)average];
 			for ( unsigned int k = 0 ; k < numComponents ; ++k ) // color channels - 3 for RGB images
 			{
 				unsigned int index = i*width*numComponents + j*numComponents + k; //index within the image
@@ -112,7 +112,7 @@ void Image::writeAsHDRPPM(const char *outputFile){
 				int channel = buffer[index] * (RESOLUTION-1);
 
 				float res = tonemap[channel] * 255;
-//				float res = toned * buffer[index] * 255 * 255;
+//				float res = sqrt(toned * buffer[index]) * 255;
 
 				if (res > 255.0f) {
 					res = 255.0f;

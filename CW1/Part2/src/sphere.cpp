@@ -57,7 +57,6 @@ bool Sphere::intersect(const Ray &r, Vec3f* intersection)
 Vec3f Sphere::getNormalAt(const Ray &r) {
 	Vec3f intersection;
 	if (intersect(r,&intersection)) {
-//		return Vec3f(1.0f,0.0f,0.0f);
 		Vec3f normal = intersection - centre;
 		normal.Normalize();
 		return normal;

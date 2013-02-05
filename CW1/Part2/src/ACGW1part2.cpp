@@ -18,7 +18,7 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere);
 int main() {
 	//Image worldMap(LL_IMAGE);
 	//worldMap.writeToFile("../WorldMap/world.pfm");
-	Sphere sphere(Vec3f(0.5f,-0.5f, 20.0f),0.5f);
+	Sphere sphere(Vec3f(0.5f,-0.5f, 20000.0f),0.5f);
 
 	Image normalMap(_width,_height);
 
@@ -45,7 +45,7 @@ void getNormalMap(Image output, Sphere pSphere) {
     for(uint i = 0; i < height; i++) {
         for(uint j = 0; j < width; j++){
         	float origY = (float) i/height;
-        	float origX = (float) j/height;
+        	float origX = (float) j/width;
         	Ray incident = Ray(Vec3f(0.0f,0.0f,1.0f),Vec3f(origX,-origY,0.0f));
 			Vec3f normal = pSphere.getNormalAt(incident);
 
@@ -97,5 +97,5 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 				output.buffer[index+2] = c.b();
 			}
 	}
-	output.writeAsPPM("part2.ppm");
+	output.writeAsPPMGamma("part2.ppm");
 }

@@ -40,7 +40,7 @@ int main() {
 
 	writeVectorMap(reflectMap, "reflectMap.ppm");
 
-//	renderScene(output, envMap, sphere);
+	renderScene(output, envMap, sphere);
 	renderScene(output, envMap, normalMap);
 
 	std::cout << "Finished!" << endl;
@@ -100,15 +100,15 @@ void writeVectorMap(Image &input, char* filename) {
 	uint width = input.width;
 	uint height = input.height;
 	uint channels = input.numComponents;
-	Image normalMap = Image(width,height);
+	Image output = Image(width,height);
 
 	uint arrayLen = height * width * channels;
 
     for(uint i = 0; i < arrayLen; i++) {
-		normalMap.buffer[i] = (input.buffer[i] + 1.0f)/2.0f;
+		output.buffer[i] = (input.buffer[i] + 1.0f)/2.0f;
     }
 
-    normalMap.writeAsPPM(filename);
+    output.writeAsPPM(filename);
 }
 
 void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
@@ -118,14 +118,13 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 	output.SetAllPixels(Vec3f(0.0,0.0,0.0));
 	for (uint i = 0; i < height; ++i)
 		for(uint j = 0; j < width; ++j){
-			float x = (float) i/height;
-			float y = (float) j/width;
+			float x = (float) j/height;
+			float y = (float) i/width;
 			Ray ray = Ray(Vec3f(0.0,0.0,1.0), Vec3f(x,-y,0.0));
 			Vec3f intersection;
 			if (pSphere.intersect(ray, &intersection)){
 				Vec3f sphereNorm = pSphere.getNormalAt(ray);
 				sphereNorm.Normalize();
-
 				Vec3f direction = ray.getDirection().Normalized().Negated();
 				float ndotv = sphereNorm.Dot3(direction);
 				ndotv *= 2.0;
@@ -139,7 +138,7 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 				output.buffer[index+2] = c.b();
 			}
 	}
-	output.writeAsPPMGamma("part2.ppm");
+	output.writeAsPPMGamma("render1.ppm");
 }
 
 void renderScene(Image& output, EnvironmentMap& em, Image& normalMap){
@@ -169,5 +168,5 @@ void renderScene(Image& output, EnvironmentMap& em, Image& normalMap){
 		output.buffer[index+1] = c.g();
 		output.buffer[index+2] = c.b();
 	}
-	output.writeAsPPMGamma("part2.ppm");
+	output.writeAsPPMGamma("render2.ppm");
 }

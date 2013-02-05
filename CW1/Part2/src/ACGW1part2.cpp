@@ -11,15 +11,18 @@
 UINT _width = 511;
 UINT _height = 511;
 
-void getNormalMap(Image output, Sphere pSphere);
-void writeNormalMap(Image input);
+void getNormalMap(Image &output, Sphere pSphere);
+void writeVectorMap(Image &input, char* filename);
+
+Image getReflectMap(const Image &normalMap);
+
 void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere);
 void renderScene(Image& output, EnvironmentMap& em, Image& normalMap);
 
 int main() {
 	//Image worldMap(LL_IMAGE);
 	//worldMap.writeToFile("../WorldMap/world.pfm");
-	Sphere sphere(Vec3f(0.5f,-0.5f, 50000.0f),0.5f);
+	Sphere sphere(Vec3f(0.5f,-0.5f, 100.0f),0.5f);
 
 	Image normalMap(_width,_height);
 
@@ -31,7 +34,11 @@ int main() {
 
 	getNormalMap(normalMap,sphere);
 
-	writeNormalMap(normalMap);
+	writeVectorMap(normalMap, "normalMap.ppm");
+
+	Image reflectMap = getReflectMap(normalMap);
+
+	writeVectorMap(reflectMap, "reflectMap.ppm");
 
 //	renderScene(output, envMap, sphere);
 	renderScene(output, envMap, normalMap);
@@ -41,7 +48,7 @@ int main() {
 	return 0;
 }
 
-void getNormalMap(Image output, Sphere pSphere) {
+void getNormalMap(Image &output, Sphere pSphere) {
 	uint height = output.height;
 	uint width = output.width;
     for(uint i = 0; i < height; i++) {
@@ -56,7 +63,40 @@ void getNormalMap(Image output, Sphere pSphere) {
     }
 }
 
-void writeNormalMap(Image input) {
+Image getReflectMap(const Image &normalMap) {
+	uint height = normalMap.height;
+	uint width = normalMap.width;
+
+	Image output = Image(width,height);
+
+	output.SetAllPixels(Vec3f(0.0,0.0,0.0));
+
+	uint numPixels = width*height;
+
+	Vec3f direction(0.0f,0.0f,1.0f);
+	direction.Negate();
+
+	for (uint i = 0; i < numPixels; ++i) {
+		uint index = i * 3;
+		Vec3f normal(normalMap.buffer[index],normalMap.buffer[index+1],normalMap.buffer[index+2]);
+		if (normal==Vec3f(0.0f,0.0f,0.0f)) {
+			continue;
+		}
+		float ndotv = normal.Dot3(direction);
+		ndotv*=2;
+		Vec3f r(normal.Scale(ndotv) - direction);
+		r.Normalize();
+
+		output.buffer[index] = r.x();
+		output.buffer[index+1] = r.y();
+		output.buffer[index+2] = r.z();
+
+	}
+
+	return output;
+}
+
+void writeVectorMap(Image &input, char* filename) {
 	uint width = input.width;
 	uint height = input.height;
 	uint channels = input.numComponents;
@@ -68,7 +108,7 @@ void writeNormalMap(Image input) {
 		normalMap.buffer[i] = (input.buffer[i] + 1.0f)/2.0f;
     }
 
-    normalMap.writeAsPPM("normalMap.ppm");
+    normalMap.writeAsPPM(filename);
 }
 
 void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
@@ -83,18 +123,13 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 			Ray ray = Ray(Vec3f(0.0,0.0,1.0), Vec3f(x,-y,0.0));
 			Vec3f intersection;
 			if (pSphere.intersect(ray, &intersection)){
-				//v = ray.getDirection();//+ray.getOrigin();
 				Vec3f sphereNorm = pSphere.getNormalAt(ray);
 				sphereNorm.Normalize();
-//				intersection.Normalize();
-//				intersection.Negate();
-//				float ndotv = sphereNorm.Dot3(intersection);
 
 				Vec3f direction = ray.getDirection().Normalized().Negated();
 				float ndotv = sphereNorm.Dot3(direction);
 				ndotv *= 2.0;
 
-//				Vec3f r(sphereNorm.Scale(ndotv) - intersection);
 				Vec3f r(sphereNorm.Scale(ndotv) - direction);
 				LatLong ll(r);
 				Vec3f c = em.mapTo(ll);
@@ -122,6 +157,9 @@ void renderScene(Image& output, EnvironmentMap& em, Image& normalMap){
 	for (uint i = 0; i < numPixels; ++i) {
 		uint index = i * 3;
 		Vec3f normal(normalMap.buffer[index],normalMap.buffer[index+1],normalMap.buffer[index+2]);
+		if (normal==Vec3f(0.0f,0.0f,0.0f)) {
+			continue;
+		}
 		float ndotv = normal.Dot3(direction);
 		ndotv*=2;
 		Vec3f r(normal.Scale(ndotv) - direction);

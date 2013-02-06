@@ -17,7 +17,7 @@ void writeVectorMap(Image &input, char* filename);
 Image getReflectMap(const Image &normalMap);
 
 void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere);
-void renderScene(Image& output, EnvironmentMap& em, Image& normalMap);
+void renderScene(Image& output, EnvironmentMap& em, Image& reflectMap);
 
 int main() {
 	//Image worldMap(LL_IMAGE);
@@ -41,7 +41,7 @@ int main() {
 	writeVectorMap(reflectMap, "reflectMap.ppm");
 
 	renderScene(output, envMap, sphere);
-	renderScene(output, envMap, normalMap);
+	renderScene(output, envMap, reflectMap);
 
 	std::cout << "Finished!" << endl;
 
@@ -141,7 +141,7 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 	output.writeAsPPMGamma("render1.ppm");
 }
 
-void renderScene(Image& output, EnvironmentMap& em, Image& normalMap){
+void renderScene(Image& output, EnvironmentMap& em, Image& reflectMap){
 	uint height = output.height;
 	uint width = output.width;
 	output.exposure = 16.0;
@@ -150,19 +150,13 @@ void renderScene(Image& output, EnvironmentMap& em, Image& normalMap){
 
 	uint numPixels = width*height;
 
-	Vec3f direction(0.0f,0.0f,1.0f);
-	direction.Negate();
-
 	for (uint i = 0; i < numPixels; ++i) {
 		uint index = i * 3;
-		Vec3f normal(normalMap.buffer[index],normalMap.buffer[index+1],normalMap.buffer[index+2]);
-		if (normal==Vec3f(0.0f,0.0f,0.0f)) {
+		Vec3f reflect(reflectMap.buffer[index],reflectMap.buffer[index+1],reflectMap.buffer[index+2]);
+		if (reflect==Vec3f(0.0f,0.0f,0.0f)) {
 			continue;
 		}
-		float ndotv = normal.Dot3(direction);
-		ndotv*=2;
-		Vec3f r(normal.Scale(ndotv) - direction);
-		LatLong ll(r);
+		LatLong ll(reflect);
 		Vec3f c = em.mapTo(ll);
 		output.buffer[index] = c.r();
 		output.buffer[index+1] = c.g();

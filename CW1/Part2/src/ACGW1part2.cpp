@@ -22,7 +22,7 @@ void renderScene(Image& output, EnvironmentMap& em, Image& reflectMap);
 int main() {
 	//Image worldMap(LL_IMAGE);
 	//worldMap.writeToFile("../WorldMap/world.pfm");
-	Sphere sphere(Vec3f(0.5f,-0.5f, 100.0f),0.5f);
+	Sphere sphere(Vec3f(-0.5f,-0.5f, 100.0f),0.5f);
 
 	Image normalMap(_width,_height);
 
@@ -59,7 +59,7 @@ void getNormalMap(Image &output, Sphere pSphere) {
         for(uint j = 0; j < width; j++){
         	float origY = (float) i/height;
         	float origX = (float) j/width;
-        	Ray incident = Ray(Vec3f(0.0f,0.0f,1.0f),Vec3f(origX,-origY,0.0f));
+        	Ray incident = Ray(Vec3f(0.0f,0.0f,1.0f),Vec3f(-origX,-origY,0.0f));
 			Vec3f normal = pSphere.getNormalAt(incident);
 
 			output.SetPixel(j,i,normal);
@@ -124,7 +124,7 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 		for(uint j = 0; j < width; ++j){
 			float x = (float) j/height;
 			float y = (float) i/width;
-			Ray ray = Ray(Vec3f(0.0,0.0,1.0), Vec3f(x,-y,0.0));
+			Ray ray = Ray(Vec3f(0.0,0.0,1.0), Vec3f(-x,-y,0.0));
 			Vec3f intersection;
 			if (pSphere.intersect(ray, &intersection)){
 				Vec3f sphereNorm = pSphere.getNormalAt(ray);

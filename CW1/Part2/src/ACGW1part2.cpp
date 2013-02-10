@@ -34,9 +34,13 @@ int main() {
 
 	getNormalMap(normalMap,sphere);
 
+	normalMap.writeToFile("normalMap.pfm");
+
 	writeVectorMap(normalMap, "normalMap.ppm");
 
 	Image reflectMap = getReflectMap(normalMap);
+
+	reflectMap.writeToFile("reflectMap.pfm");
 
 	writeVectorMap(reflectMap, "reflectMap.ppm");
 
@@ -139,6 +143,8 @@ void renderScene(Image& output, EnvironmentMap& em, Sphere& pSphere){
 			}
 	}
 	output.writeAsPPMGamma("render1.ppm");
+	output.writeAsPPM("render1nogamma.ppm");
+	output.writeToFile("render1.pfm");
 }
 
 void renderScene(Image& output, EnvironmentMap& em, Image& reflectMap){

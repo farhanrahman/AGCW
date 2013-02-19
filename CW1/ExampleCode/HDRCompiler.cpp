@@ -63,6 +63,22 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 		}
 	}
 
+	float min_luma = MAXFLOAT;
+	float max_luma = 0;
+
+	for (uint i = 0; i < height * width; i++) {
+		uint ind = i * numChannels;
+		float luma = 0.2126 * result.buffer[ind] + 0.7152 * result.buffer[ind] + 0.0722 * result.buffer[ind];
+		if (luma < min_luma) {
+			min_luma = luma;
+		}
+		else if (luma > max_luma) {
+			max_luma = luma;
+		}
+	}
+
+	float range = max_luma / min_luma;
+
 	for (int i = 0; i < 13; i++) {
 
 		result.exposure = pow(2,i);
@@ -77,8 +93,6 @@ Image HDRCompiler::compileHDR(std::vector<Image> &images){
 
 	result.writeToFile("out.pfm");
 
-	//result.writeAsHDRPPM2("outHDRPPM2.ppm");
-	//result.writeAsPPM("out.ppm");
 	result.writeAsHDRPPM("hdrout.ppm");
 	result.writeAsHDRPPM2("hdrout2.ppm");
 }

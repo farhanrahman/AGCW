@@ -7,8 +7,6 @@
 
 #define uchar unsigned char
 
-#define L 256
-
 class Image{
 public:
 	Image(
@@ -50,7 +48,8 @@ public:
 	unsigned int height;
 	unsigned int numComponents;
 	unsigned int exposure;
-	float cdf[L];
+	float *cdfX;
+	float *cdfY;
 
 
 private:

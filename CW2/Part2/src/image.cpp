@@ -8,7 +8,7 @@
 
 #define PI 3.14159265358979323
 
-#define CDFRESOLUTION 100000
+#define CDFRESOLUTION 10000
 
 Image::Image(const char * inputImage){
 	this->initialise(inputImage);
@@ -21,13 +21,13 @@ Image::Image(const char * inputImage, unsigned int exposure){
 
 void Image::initialise(const char * inputImage){
     this->buffer = loadPFM(inputImage, width, height, numComponents);
-	cdfX = new uint[CDFRESOLUTION];
+	cdfX = new ushort[CDFRESOLUTION];
 	for (uint i = 0; i < CDFRESOLUTION; ++i){
 		cdfX[i] = 0.0;
 	}
-	cdfY = new uint*[width];
+	cdfY = new ushort*[width];
 	for (uint i = 0; i < width; ++i){
-		cdfY[i] = new uint[CDFRESOLUTION];
+		cdfY[i] = new ushort[CDFRESOLUTION];
 		for (uint j = 0; j < CDFRESOLUTION; ++j){
 			cdfY[i][j] = 0.0;
 		}
@@ -198,9 +198,9 @@ vecpairuu Image::getEnvMapSamplesFromCDF(uint numSamples) {
 	srand(0);
 	for (uint i = 0; i < numSamples; i++) {
 		uint randx = rand()%CDFRESOLUTION;
-		uint column = cdfX[randx];
+		ushort column = cdfX[randx];
 		uint randy = rand()%CDFRESOLUTION;
-		uint row = cdfY[column][randy];
+		ushort row = cdfY[column][randy];
 		samples.push_back(std::pair<uint,uint>(column,row));
 	}
 	return samples;

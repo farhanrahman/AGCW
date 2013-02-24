@@ -27,9 +27,6 @@ void getNormalMap(Image &output, Sphere pSphere);
 void renderDiffuse(Image& output, Image& em, Image& normalMap,
 		 vecpairuu& samples, std::vector<Vec3f>& normals);
 
-Image getReflectMap(const Image &normalMap);
-
-
 int main(int argc, char * argv[]) {
 
 	Image latLongImg(LL_IMAGE);
@@ -43,8 +40,6 @@ int main(int argc, char * argv[]) {
 	Image normalMap(_width,_height);
 
 	getNormalMap(normalMap,sphere);
-
-//	Image reflectMap = getReflectMap(normalMap);
 
 	uint numSamps[] = {64,256,1024};
 
@@ -66,18 +61,6 @@ int main(int argc, char * argv[]) {
 		stringstream pfm;
 		pfm << "sphere" << numSamps[i] << ".pfm";
 		output.writeToFile(pfm.str().c_str());
-
-//		Image envsamp = Image(LL_IMAGE);
-//		envsamp.exposure = 10;
-//		envsamp.highlightSamples(samples);
-//
-//		stringstream ppm2;
-//		ppm2 << "env" << numSamps[i] << ".ppm";
-//		envsamp.writeAsPPM(ppm2.str().c_str());
-//
-//		stringstream pfm2;
-//		pfm2 << "env" << numSamps[i] << ".pfm";
-//		envsamp.writeToFile(pfm2.str().c_str());
 	}
 
 
@@ -131,37 +114,3 @@ void renderDiffuse(Image& output, Image& em, Image& normalMap,
 		output.buffer[index+2] = result.b();
 	}
 }
-
-Image getReflectMap(const Image &normalMap) {
-	uint height = normalMap.height;
-	uint width = normalMap.width;
-
-	Image output = Image(width,height);
-
-	output.SetAllPixels(Vec3f(0.0,0.0,0.0));
-
-	uint numPixels = width*height;
-
-	Vec3f direction(0.0f,0.0f,1.0f);
-	direction.Negate();
-
-	for (uint i = 0; i < numPixels; ++i) {
-		uint index = i * 3;
-		Vec3f normal(normalMap.buffer[index],normalMap.buffer[index+1],normalMap.buffer[index+2]);
-		if (normal==Vec3f(0.0f,0.0f,0.0f)) {
-			continue;
-		}
-		float ndotv = normal.Dot3(direction);
-		ndotv*=2;
-		Vec3f r(normal.Scale(ndotv) - direction);
-		r.Normalize();
-
-		output.buffer[index] = r.x();
-		output.buffer[index+1] = r.y();
-		output.buffer[index+2] = r.z();
-
-	}
-
-	return output;
-}
-

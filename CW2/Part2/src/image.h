@@ -2,10 +2,14 @@
 #define IMAGE_H
 #include "loadPNM.h"
 #include <assert.h>
+#include <vector>
 
 #include "vectors.h"
 
-#define uchar unsigned char
+typedef unsigned char uchar;
+
+typedef std::vector<std::pair<uint,uint> > vecpairuu;
+
 
 class Image{
 public:
@@ -43,13 +47,17 @@ public:
 
 	void generateCDF(void);
 
+	vecpairuu getEnvMapSamplesFromCDF(uint numSamples);
+
+	void highlightSamples(vecpairuu samples);
+
 	float *buffer;
 	unsigned int width;
 	unsigned int height;
 	unsigned int numComponents;
 	unsigned int exposure;
-	float *cdfX;
-	float *cdfY;
+	uint *cdfX;
+	uint **cdfY;
 
 
 private:

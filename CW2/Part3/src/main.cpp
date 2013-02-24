@@ -24,7 +24,7 @@ int main(int argc, char * argv[]) {
 	float exp[] = {1.0, 10.0, 50.0, 200.0};
 
 	for (uint i = 0; i < sizeof(exp)/sizeof(uint); ++i){
-		Image sampleImg = Image(latLongImg);
+		Image sampleImg(LL_IMAGE);
 		sampleImg.exposure = 10;
 		sampleImg.generateSamplesFromPhongBRDF(exp[i], 256);
 

@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
 	for (uint i = 0; i < sizeof(numSamps)/sizeof(uint); i++) {
 		vecpairuu samples = latLongImg.getEnvMapSamplesFromCDF(numSamps[i]);
 
-		Image envsamp = Image(latLongImg);
+		Image envsamp = Image(LL_IMAGE);
 		envsamp.exposure = 10;
 		envsamp.highlightSamples(samples);
 

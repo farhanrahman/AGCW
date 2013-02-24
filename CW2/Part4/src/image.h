@@ -22,7 +22,7 @@ public:
 	) : 	width(width), 
 		height(height), 
 		numComponents(numComponents),
-		exposure(exposure)
+		exposure(exposure), cdfX(NULL),cdfY(NULL)
 	{
 		assert(width > 0 && height > 0 && exposure >= 1);
 		this->buffer = new float [width*height*numComponents];
@@ -32,7 +32,7 @@ public:
 	
 	Image(const char * inputImage, unsigned int exposure);
 
-	~Image(void);
+	~Image();
 
 	float operator[] (unsigned int index) const;
 

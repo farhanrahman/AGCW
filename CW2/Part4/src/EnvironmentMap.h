@@ -6,17 +6,17 @@
 
 class EnvironmentMap{
 public:
-	EnvironmentMap(Image image) : image(image) {}
+	EnvironmentMap(Image* image) : image(image) {}
 	~EnvironmentMap() {}
 
 	Vec3f mapTo(float theta, float phi) const{
-		unsigned int i = (unsigned int) ((theta/PI)  * ((float) image.height));
-		unsigned int j = (unsigned int) ((phi/(2*PI)) * ((float) image.width));
-		unsigned int index = (i*image.width + j) * image.numComponents;
-		if (index > image.height * image.width * image.numComponents) {
+		unsigned int i = (unsigned int) ((theta/PI)  * ((float) image->height));
+		unsigned int j = (unsigned int) ((phi/(2*PI)) * ((float) image->width));
+		unsigned int index = (i*image->width + j) * image->numComponents;
+		if (index > image->height * image->width * image->numComponents) {
 			return Vec3f(1.0f,1.0f,1.0f);
 		}
-		return Vec3f(image[index], image[index+1], image[index+2]);	
+		return Vec3f((*image)[index], (*image)[index+1], (*image)[index+2]);
 	}
 
 	Vec3f mapTo(const LatLong& ll) const{
@@ -41,22 +41,28 @@ public:
 			//(x/width)*2PI = phi
 			//y = (theta/PI) * height
 			//y/ height = theta/PI
-			//theta = (y/height)/PI
+			//theta = (y/height)*PI
 
-			float phi = ((float)x/(float)image.width)*2*PI;
-			float theta = ((float)y/(float)image.height)*PI;
+			float phi = ((float)x/(float)image->width)*2*PI;
+			float theta = ((float)y/(float)image->height)*PI;
 
 			LatLong ll;
 			ll.setPhi(phi);
 			ll.setTheta(theta);
 			Vec3f vec = LatLong::ll2v3f(ll);
+
+//			LatLong ll2 = LatLong::v3f2ll(vec);
+//
+//			uint y2 = (unsigned int) ((theta/PI)  * ((float) image->height));
+//			uint x2 = (unsigned int) ((phi/(2*PI)) * ((float) image->width));
+
 			vectors.push_back(vec);
 		}
 		return vectors;
 	}
 
 private:
-	Image image;
+	Image* image;
 };
 
 #endif

@@ -35,7 +35,17 @@ void Image::initialise(const char * inputImage){
 	}
 }
 
-Image::~Image(void){
+Image::~Image(){
+	delete[] buffer;
+	if (cdfX != NULL) {
+		delete[] cdfX;
+	}
+	if (cdfY !=NULL) {
+		for (uint i = 0; i < width; ++i){
+			delete[] cdfY[i];
+		}
+		delete[] cdfY;
+	}
 }
 
 float Image::operator[] (unsigned int index) const{

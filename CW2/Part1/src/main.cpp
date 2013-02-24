@@ -38,8 +38,8 @@ int main(int argc, char * argv[]){
 		/*Light exiting medium*/
 		double thetaIExit = (double) i * PI /180.0;
 		double thetaTExit = asin(ETA_T*sin(thetaIExit)/ETA_I);
-		double rParallelExit = fresnelPerpendicular(ETA_T, ETA_I, thetaIExit, thetaTExit);
-		double rPerpendicularExit = fresnelParallel(ETA_T, ETA_I, thetaIExit, thetaTExit);
+		double rParallelExit = fresnelParallel(ETA_T, ETA_I, thetaIExit, thetaTExit);
+		double rPerpendicularExit = fresnelPerpendicular(ETA_T, ETA_I, thetaIExit, thetaTExit);
 
 		exit << i << "," << rParallelExit << "," << rPerpendicularExit << std::endl;
 	}

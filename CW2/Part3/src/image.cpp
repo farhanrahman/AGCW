@@ -15,6 +15,16 @@ Image::Image(const char * inputImage){
 	this->initialise(inputImage);
 }
 
+Image::Image(const Image& image){
+	assert(width > 0 && height > 0 && exposure >= 1);
+	this->buffer = new float [image.width*image.height*image.numComponents];
+	for (uint i = 0; i < image.height; ++i)
+		for(uint j = 0; j < image.width; ++j){
+			uint index = (i*width + j)*numComponents;
+			this->buffer[index] = image.buffer[index];
+	}
+}
+
 Image::Image(const char * inputImage, unsigned int exposure){
 	this->initialise(inputImage);
 	this->exposure = exposure;

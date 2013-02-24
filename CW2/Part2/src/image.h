@@ -8,6 +8,8 @@
 
 typedef unsigned char uchar;
 
+typedef unsigned short ushort;
+
 typedef std::vector<std::pair<uint,uint> > vecpairuu;
 
 
@@ -56,8 +58,8 @@ public:
 	unsigned int height;
 	unsigned int numComponents;
 	unsigned int exposure;
-	uint *cdfX;
-	uint **cdfY;
+	ushort *cdfX;
+	ushort **cdfY;
 
 
 private:

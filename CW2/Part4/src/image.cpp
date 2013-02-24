@@ -256,7 +256,7 @@ void Image::generateSamplesFromPhongBRDF(float exponent, uint sampleNum){
 }
 
 Vec3f Image::at(uint x, uint y) {
-	uint index = y * width + x;
+	uint index = ((y * width) + x)*numComponents;
 	return Vec3f(buffer[index],buffer[index+1],buffer[index+2]);
 }
 

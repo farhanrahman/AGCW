@@ -24,8 +24,8 @@ double fresnelParallel(double etaI, double etaT, double thetaI, double thetaT){
 int main(int argc, char * argv[]){
 
 	std::ofstream enter, exit;
-	enter.open("enter.txt");
-	exit.open("exit.txt");
+	enter.open("enter.csv");
+	exit.open("exit.csv");
 
 	for (unsigned i = 0; i <= 90; ++i){
 		/*Light entering medium*/
@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
 		double thetaT = asin(ETA_I*sin(thetaI)/ETA_T);
 		double rParallel = fresnelParallel(ETA_I, ETA_T, thetaI, thetaT);
 		double rPerpendicular = fresnelPerpendicular(ETA_I, ETA_T, thetaI, thetaT);
-		enter << i << " " << rParallel << " " << rPerpendicular << std::endl;
+		enter << i << "," << rParallel << "," << rPerpendicular << std::endl;
 
 		/*Light exiting medium*/
 		double thetaIExit = thetaT;
@@ -41,7 +41,7 @@ int main(int argc, char * argv[]){
 		double rParallelExit = fresnelPerpendicular(ETA_T, ETA_I, thetaIExit, thetaTExit);
 		double rPerpendicularExit = fresnelParallel(ETA_T, ETA_I, thetaIExit, thetaTExit);
 
-		exit << i << " " << rParallelExit << " " << rPerpendicularExit << std::endl;
+		exit << i << "," << rParallelExit << "," << rPerpendicularExit << std::endl;
 	}
 
 	enter.close();

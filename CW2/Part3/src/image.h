@@ -28,6 +28,8 @@ public:
 		this->buffer = new float [width*height*numComponents];
 	}
 	
+	Image(const Image& image);
+
 	Image(const char * inputImage);
 	
 	Image(const char * inputImage, unsigned int exposure);

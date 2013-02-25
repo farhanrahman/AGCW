@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
 
 		renderDiffuse(output,latLongImg,normalMap,samples,sampnormals);
 
-		output.exposure = 16;
+		output.exposure = 18;
 
 		stringstream ppm;
 		ppm << "sphere" << numSamps[i] << ".ppm";

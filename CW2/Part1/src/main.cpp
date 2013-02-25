@@ -17,7 +17,7 @@ double fresnelPerpendicular(double etaI, double etaT, double thetaI, double thet
 }
 
 double fresnelParallel(double etaI, double etaT, double thetaI, double thetaT){
-	return pow(fabs((etaT*cos(thetaI) - etaI*cos(thetaT)) / (etaT*cos(thetaI) + etaI*cos(thetaT))) , 2.0);
+	return pow(fabs((etaI*cos(thetaT) - etaT*cos(thetaI)) / (etaI*cos(thetaT) + etaT*cos(thetaI))) , 2.0);
 }
 
 
@@ -36,10 +36,10 @@ int main(int argc, char * argv[]){
 		enter << i << "," << rParallel << "," << rPerpendicular << std::endl;
 
 		/*Light exiting medium*/
-		double thetaIExit = thetaT;
+		double thetaIExit = (double) i * PI /180.0;
 		double thetaTExit = asin(ETA_T*sin(thetaIExit)/ETA_I);
-		double rParallelExit = fresnelPerpendicular(ETA_T, ETA_I, thetaIExit, thetaTExit);
-		double rPerpendicularExit = fresnelParallel(ETA_T, ETA_I, thetaIExit, thetaTExit);
+		double rParallelExit = fresnelParallel(ETA_T, ETA_I, thetaIExit, thetaTExit);
+		double rPerpendicularExit = fresnelPerpendicular(ETA_T, ETA_I, thetaIExit, thetaTExit);
 
 		exit << i << "," << rParallelExit << "," << rPerpendicularExit << std::endl;
 	}
